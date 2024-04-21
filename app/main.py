@@ -16,7 +16,7 @@ def get(key):
     if key in ttl_dict:
         set_time = ttl_dict[key]
         print(f"set_time: {set_time}")
-        valid_ttl = (int((datetime.now() - ttl_dict[key][0]).total_seconds())*1000 <= int(ttl_dict[key][1]))
+        valid_ttl = (int((datetime.now() - ttl_dict[key][0]).total_())*1000 <= timedelta(milliseconds=int(ttl_dict[key][1])))
         time_passed = int((datetime.now() - ttl_dict[key][0]).total_seconds())*1000
         expiry_time = int(ttl_dict[key][1])
         print(f"time passed : {time_passed}")
