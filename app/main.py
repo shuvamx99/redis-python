@@ -16,7 +16,7 @@ def get(key):
     if key in ttl_dict:
         set_time = ttl_dict[key]
         print(f"set_time: {set_time}")
-        valid_ttl = (int((datetime.now() - ttl_dict[key][0]).total_seconds()) <= int(ttl_dict[key][1]))
+        valid_ttl = (int((datetime.now() - ttl_dict[key][0]).total_seconds())*1000 <= int(ttl_dict[key][1]))
         if not valid_ttl:
             return "$-1\r\n"
     value = db[key]
