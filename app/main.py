@@ -8,7 +8,10 @@ def handle_client(client_socket):
             recv = client_socket.recv(1024)
             if not recv:
                 break
+            print(f"recv : {recv}")
             command = recv.decode().strip().split()
+            print(f"command : {command}")
+            print(len(command))
             if command:
                 command_type = command[0].upper()
                 command_args = command[1:]
