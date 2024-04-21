@@ -13,16 +13,16 @@ def handle_client(client_socket):
                 command_type = command[0].upper()
                 command_args = command[1:]
                 response = execute_command(command_type, command_args)
-                client_socket.sendall(response)
+                client_socket.sendall(response.encode())
         
 
 def execute_command(command_type, command_args):
     if command_type == "PING":
-        return "+PONG\r\n".encode()
+        return "+PONG\r\n"
     elif command_type == "ECHO":
-        return command_args
+        return f"+{command_args[0]}\r\n"
     else:
-        return f"Command {command_type} not yet supported!"
+        return "-ERR unknown command\r\n"
 
 
 def main():
