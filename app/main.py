@@ -2,6 +2,17 @@
 import socket
 import threading
 
+db = {}
+
+def set(key, value):
+    db[key] = value
+    return "+OK\r\n"
+
+def get(key):
+    value = db[key]
+    length = len(value)
+    return f"${length}\r\n{value}\r\n"
+
 def handle_client(client_socket):
     with client_socket:
         while True:
@@ -14,7 +25,6 @@ def handle_client(client_socket):
             if command:
                 response = execute_command(command)
                 client_socket.sendall(response.encode())
-        
 
 def execute_command(command):
 
@@ -22,8 +32,12 @@ def execute_command(command):
         return "+PONG\r\n"
     elif command[0].upper() == "ECHO":
         return f"+{command[1]}\r\n"
+    elif command[0].upper() == "SET":
+        return set(command[1], command[2])
+    elif command[0].upper() == "GET":
+        return get(command[1])
     else:
-        return "-ERR unknown command\r\n"
+        return "-ERR\r\n"
 
 def parse_redis_command(command_str):
     parts = command_str.strip().split("\r\n")
