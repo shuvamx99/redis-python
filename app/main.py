@@ -8,8 +8,22 @@ def handle_client(client_socket):
             recv = client_socket.recv(1024)
             if not recv:
                 break
-            client_socket.sendall("+PONG\r\n".encode())
-    
+            command = recv.decode().strip().split()
+            if command:
+                command_type = command[0].upper()
+                command_args = command[1:]
+                response = execute_command(command_type, command_args)
+                client_socket.sendall(response)
+        
+
+def execute_command(command_type, command_args):
+    if command_type == "PING":
+        return "+PONG\r\n"
+    elif command_type == "ECHO":
+        return command_args
+    else:
+        return f"Command {command_type} not yet supported!"
+
 
 def main():
     # You can use print statements as follows for debugging, they'll be visible when running tests.
