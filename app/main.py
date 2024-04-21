@@ -12,19 +12,16 @@ def handle_client(client_socket):
             print(f"command : {command}")
 
             if command:
-                command_type = command[0].upper()
-                command_args = command[1]
-                response = execute_command(command_type, command_args)
+                response = execute_command(command)
                 client_socket.sendall(response.encode())
         
 
-def execute_command(command_type, command_args):
-    print(f"Command : {command_type}")
-    print(f"Arguments : {command_args}")
-    if command_type == "PING":
+def execute_command(command):
+
+    if command[0] == "PING":
         return "+PONG\r\n"
-    elif command_type == "ECHO":
-        return f"+{command_args}\r\n"
+    elif command[0] == "ECHO":
+        return f"+{command[1]}\r\n"
     else:
         return "-ERR unknown command\r\n"
 
