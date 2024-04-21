@@ -18,7 +18,7 @@ def handle_client(client_socket):
 
 def execute_command(command_type, command_args):
     if command_type == "PING":
-        return "+PONG\r\n"
+        return "+PONG\r\n".encode()
     elif command_type == "ECHO":
         return command_args
     else:
