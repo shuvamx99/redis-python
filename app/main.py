@@ -1,14 +1,21 @@
 # Uncomment this to pass the first stage
 import socket
 import threading
+from datetime import datetime, timedelta
 
 db = {}
+ttl_dict = {}
 
-def set(key, value):
+def set(key, value, ttl:None):
     db[key] = value
+    if ttl is not None:
+        ttl_dict[key] = {datetime.now(), ttl}
     return "+OK\r\n"
 
 def get(key):
+    valid_ttl = (timedelta(datetime.now(), db[key][0]).seconds <= db[key][1])
+    if not valid_ttl:
+        return "$-1\r\n"
     value = db[key]
     length = len(value)
     return f"${length}\r\n{value}\r\n"
@@ -33,7 +40,10 @@ def execute_command(command):
     elif command[0].upper() == "ECHO":
         return f"+{command[1]}\r\n"
     elif command[0].upper() == "SET":
-        return set(command[1], command[2])
+        ttl = None
+        if len(command)>3:
+            ttl = command[4]
+        return set(command[1], command[2], ttl)
     elif command[0].upper() == "GET":
         return get(command[1])
     else:
