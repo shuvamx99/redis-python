@@ -17,6 +17,10 @@ def get(key):
         set_time = ttl_dict[key]
         print(f"set_time: {set_time}")
         valid_ttl = (int((datetime.now() - ttl_dict[key][0]).total_seconds())*1000 <= int(ttl_dict[key][1]))
+        time_passed = int((datetime.now() - ttl_dict[key][0]).total_seconds())*1000
+        expiry_time = int(ttl_dict[key][1])
+        print(f"time passed : {time_passed}")
+        print(f"expiration time: {expiry_time}")
         if not valid_ttl:
             return "$-1\r\n"
     value = db[key]
