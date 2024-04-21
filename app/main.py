@@ -8,7 +8,7 @@ def handle_client(client_socket):
             recv = client_socket.recv(1024)
             if not recv:
                 break
-            command = parse_redis_command(recv)
+            command = parse_redis_command(recv.decode())
             print(f"command : {command}")
 
             if command:
