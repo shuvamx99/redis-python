@@ -9,7 +9,7 @@ ttl_dict = {}
 def set(key, value, ttl:None):
     db[key] = value
     if ttl is not None:
-        ttl_dict[key] = {datetime.now(), ttl}
+        ttl_dict[key] = [datetime.now(), ttl]
     return "+OK\r\n"
 
 def get(key):
