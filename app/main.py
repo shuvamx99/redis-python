@@ -4,8 +4,11 @@ import socket
 
 def handle_connection(client_socket):
     with client_socket:
-        recv = client_socket.recv(1024)
-        client_socket.sendall("+PONG\r\n".encode())
+        while True:
+            recv = client_socket.recv(1024)
+            if not recv:
+                break
+            client_socket.sendall("+PONG\r\n".encode())
     
 
 def main():
