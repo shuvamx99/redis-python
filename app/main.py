@@ -8,13 +8,12 @@ def handle_client(client_socket):
             recv = client_socket.recv(1024)
             if not recv:
                 break
-            print(f"recv : {recv}")
-            command = recv.decode().strip().split()
+            command = parse_redis_command(recv)
             print(f"command : {command}")
-            print(len(command))
+
             if command:
                 command_type = command[0].upper()
-                command_args = command[1:]
+                command_args = command[1]
                 response = execute_command(command_type, command_args)
                 client_socket.sendall(response.encode())
         
@@ -25,10 +24,23 @@ def execute_command(command_type, command_args):
     if command_type == "PING":
         return "+PONG\r\n"
     elif command_type == "ECHO":
-        return f"+{command_args[0]}\r\n"
+        return f"+{command_args}\r\n"
     else:
         return "-ERR unknown command\r\n"
 
+def parse_redis_command(command_str):
+    parts = command_str.strip().split("\r\n")
+    # Extracting the number of arguments
+    num_args = int(parts[0][1:])
+    # Extracting the arguments
+    args = []
+    i = 1
+    while i < len(parts):
+        arg_length = int(parts[i][1:])
+        arg = parts[i + 1][:arg_length]
+        args.append(arg)
+        i += 2
+    return args
 
 def main():
     # You can use print statements as follows for debugging, they'll be visible when running tests.
