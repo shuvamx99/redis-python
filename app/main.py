@@ -20,7 +20,7 @@ def execute_command(command):
 
     if command[0] == "PING":
         return "+PONG\r\n"
-    elif command[0] == "ECHO":
+    elif command[0].upper() == "ECHO":
         return f"+{command[1]}\r\n"
     else:
         return "-ERR unknown command\r\n"
