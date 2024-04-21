@@ -13,7 +13,7 @@ def set(key, value, ttl:None):
     return "+OK\r\n"
 
 def get(key):
-    valid_ttl = (int(timedelta(datetime.now(), db[key][0]).seconds) <= int(db[key][1]))
+    valid_ttl = (int(timedelta(datetime.now(), ttl_dict[key][0]).seconds) <= int(ttl_dict[key][1]))
     if not valid_ttl:
         return "$-1\r\n"
     value = db[key]
